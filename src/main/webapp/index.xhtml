@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Web Timer</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <p:panel id="panel" header="Online Timer" style="margin-bottom:10px;">
+                <p:panelGrid columns="2">
+                    <p:commandButton id="start_btn" 
+                                     value="Start"
+                                     update="start_time_value, status_value"
+                                     actionListener="#{onlineTimer.actionListenerSetStartTime()}"/>
+                    <p:outputLabel id="start_time_value" 
+                                   value="#{onlineTimer.startTime}"/>
+                    <p:commandButton id="stop_btn" 
+                                     value="Stop" 
+                                     update="stop_time_value, duration_value, status_value, 
+                                     timers_table, total_duration_value, measurements_value"
+                                     actionListener="#{onlineTimer.actionListenerSetStopTime()}"/>
+                    <p:outputLabel id="stop_time_value" 
+                                   value="#{onlineTimer.stopTime}"/>
+                    <p:outputLabel value="Status"/>
+                    <p:outputLabel id="status_value" 
+                                   value="#{onlineTimer.status}"/>
+                    <p:outputLabel value="Duration"/>
+                    <p:outputLabel id="duration_value" 
+                                   value="#{onlineTimer.duration}"/>
+                    <p:outputLabel value="Meas"/>
+                    <p:outputLabel id="measurements_value" 
+                                   value="#{onlineTimer.list.size()}"/>
+                    <p:outputLabel title="asd" value="Total Duration: "/>
+                    <p:outputLabel id="total_duration_value"
+                                   value="#{onlineTimer.totalDuration}"/>
+                </p:panelGrid>
+                <br/>
+                <p:commandButton value="Clear All"
+                                 update="start_time_value, stop_time_value, duration_value, 
+                                 timers_table, total_duration_value, measurements_value, status_value"
+                                 actionListener="#{onlineTimer.actionListenerReset()}"/>
+                <br/>
+                <br/>
+                <p:dataTable id="timers_table" 
+                             value="#{onlineTimer.list}" var="entry">
+                    <p:column headerText="" width="4%">
+                        <p:row>
+                            <p:outputLabel value="#{1 + onlineTimer.list.indexOf(entry)}"/>
+                        </p:row>
+                    </p:column>
+                    <p:column headerText="Start time" 
+                              field="#{entry.startTime}">
+                        <p:row>
+                            <p:outputLabel value="#{entry.startTime.toLocalTime()}"/>
+                        </p:row>
+                    </p:column>
+                    <p:column headerText="Stop time">
+                        <p:row>
+                            <p:outputLabel value="#{entry.stopTime.toLocalTime()}"/>
+                        </p:row>
+                    </p:column>
+                    <p:column headerText="Duration">
+                        <p:row>
+                            <p:outputLabel value="#{entry.duration.toLocalTime()}"/>
+                        </p:row>
+                    </p:column>
+                    <p:column headerText="Description">
+                        <p:row >
+                            <p:inputText id="edit_box"
+                                         placeholder="enter description"
+                                         rendered="#{!onlineTimer.editButton}"
+                                         value="#{entry.description}"/>
+                            <p:outputLabel id="save_box"
+                                           style="border: black"
+                                           value="#{entry.description}"
+                                           rendered="#{!onlineTimer.editButton}"/>
+                            <p:commandButton id="edit_button"
+                                             update="@this, edit_box, save_box"
+                                             value="#{onlineTimer.editButtonValue}" 
+                                             actionListener="#{onlineTimer.actionListenerEditDescription()}"/>
+                        </p:row>
+                    </p:column>
+                </p:dataTable>
+                <br/>
+            </p:panel>
+        </h:form>
+    </h:body>
+</html>
